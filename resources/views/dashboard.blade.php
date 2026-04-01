@@ -174,7 +174,7 @@
         </div>
         <!-- Modal Detail Foto Alpine.js (Teleport ke Body untuk Z-Index Absolute Tertinggi) -->
         <template x-teleport="body">
-            <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[99999] flex items-center justify-center bg-gray-900/80 backdrop-blur-sm transition-opacity"
+            <div x-show="isModalOpen" style="display: none; z-index: 99999;" class="fixed inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm transition-opacity"
                 x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100"
