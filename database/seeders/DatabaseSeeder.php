@@ -8,18 +8,21 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // 1. Buat User Admin Default untuk Login
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin NVR',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('password'), // password standar
+        ]);
+
+        // 2. Jalankan NvrEventSeeder agar dashboard ada datanya
+        $this->call([
+            NvrEventSeeder::class,
         ]);
     }
 }
