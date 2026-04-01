@@ -209,7 +209,7 @@
                     </div>
 
                     <div class="w-full bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center min-h-[350px] max-h-[65vh] relative shadow-inner border border-gray-800">
-                        <img :src="selectedLog?.snapshot_path" alt="Snapshot NVR" class="max-w-full max-h-[65vh] object-contain relative z-10 w-full" x-show="selectedLog?.snapshot_path" @error="$event.target.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' bg=\'gray\'><rect width=\'100%\' height=\'100%\' fill=\'%23dddddd\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'20px\' text-anchor=\'middle\' fill=\'%23555\'>Gambar Tidak Ditemukan</text></svg>'">
+                        <img :src="selectedLog?.snapshot_path" alt="Snapshot NVR" class="max-w-full max-h-[65vh] object-contain relative z-10 w-full" x-show="selectedLog?.snapshot_path" x-on:error="$event.target.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' bg=\'gray\'><rect width=\'100%\' height=\'100%\' fill=\'%23dddddd\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'20px\' text-anchor=\'middle\' fill=\'%23555\'>Gambar Tidak Ditemukan</text></svg>'">
                         
                         <!-- Recording OSD Demo (On-Screen Display) -->
                         <div class="absolute top-4 left-4 z-20 flex items-center bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/20 shadow-lg">
