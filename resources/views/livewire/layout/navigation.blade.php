@@ -27,6 +27,12 @@ $logout = function (Logout $logout) {
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if(auth()->user() && auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('cms.users.index')" :active="request()->routeIs('cms.users.*')" wire:navigate>
+                            {{ __('CMS Pengguna') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

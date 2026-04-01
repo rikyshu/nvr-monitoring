@@ -18,6 +18,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin NVR',
             'email' => 'admin@admin.com',
             'password' => bcrypt('password'), // password standar
+            'role' => 'admin',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Viewer',
+            'email' => 'viewer@viewer.com',
+            'password' => bcrypt('password'), // password standar
+            'role' => 'viewer',
         ]);
 
         // 2. Jalankan NvrEventSeeder agar dashboard ada datanya
