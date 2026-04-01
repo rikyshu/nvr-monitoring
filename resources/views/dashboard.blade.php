@@ -143,8 +143,10 @@
                                 <div class="p-4 border border-gray-100 rounded-xl hover:shadow-md transition-shadow bg-gray-50/50 flex items-center justify-between">
                                     <div class="flex items-center">
                                         <div class="w-14 h-12 bg-gray-200 rounded-lg overflow-hidden relative mr-4 shadow-sm border border-gray-200">
-                                            <!-- Dummy Camera Thumb -->
-                                            <img src="https://images.unsplash.com/photo-1557053964-937650ddc8a2?auto=format&fit=crop&w=150&q=80" alt="Camera View" class="w-full h-full object-cover">
+                                            <!-- Dummy Camera Thumb Placeholder -->
+                                            <div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                            </div>
                                             <div class="absolute top-0 right-0 bg-green-500 text-white text-[9px] px-1 m-0.5 rounded-sm font-bold shadow" x-show="cam.status === 'LIVE'">REC</div>
                                         </div>
                                         <div>
@@ -170,54 +172,56 @@
 
             </div>
         </div>
-        <!-- Modal Detail Foto Alpine.js -->
-        <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/80 backdrop-blur-sm transition-opacity"
-            x-transition:enter="ease-out duration-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="ease-in duration-200"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0">
-            
-            <div @click.outside="closePhotoModal()" class="bg-white rounded-2xl shadow-2xl p-6 w-11/12 max-w-4xl relative overflow-hidden flex flex-col items-center border border-gray-100"
-                 x-transition:enter="ease-out duration-300 transform"
-                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                 x-transition:leave="ease-in duration-200 transform"
-                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+        <!-- Modal Detail Foto Alpine.js (Teleport ke Body untuk Z-Index Absolute Tertinggi) -->
+        <template x-teleport="body">
+            <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[99999] flex items-center justify-center bg-gray-900/80 backdrop-blur-sm transition-opacity"
+                x-transition:enter="ease-out duration-300"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0">
                 
-                <button @click="closePhotoModal()" class="absolute top-4 right-4 bg-gray-100 hover:bg-red-50 hover:text-red-500 rounded-full p-2 transition-colors focus:outline-none z-50">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-
-                <div class="w-full text-left mb-4">
-                    <h3 class="text-2xl font-black text-gray-800 mb-1 flex items-center">
-                        <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        Inspeksi Visual CCTV
-                    </h3>
-                    <div class="flex flex-wrap items-center space-x-2 text-sm text-gray-600 mt-2" x-show="selectedLog">
-                        <span class="font-bold border border-gray-200 bg-gray-50 px-2 py-0.5 rounded shadow-sm text-blue-900" x-text="selectedLog?.timestamp"></span> 
-                        <span>•</span>
-                        <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-black uppercase tracking-widest shadow-sm" x-text="selectedLog?.event_type?.replace('_', ' ')"></span>
-                        <span>•</span>
-                        <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> <b class="text-gray-800" x-text="selectedLog?.camera_name"></b></span>
-                    </div>
-                </div>
-
-                <div class="w-full bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center min-h-[350px] max-h-[65vh] relative shadow-inner border border-gray-800">
-                    <img :src="selectedLog?.snapshot_path" alt="Snapshot NVR" class="max-w-full max-h-[65vh] object-contain relative z-10 w-full" x-show="selectedLog?.snapshot_path">
+                <div @click.outside="closePhotoModal()" class="bg-white rounded-2xl shadow-2xl p-6 w-11/12 max-w-4xl relative overflow-hidden flex flex-col items-center border border-gray-100"
+                    x-transition:enter="ease-out duration-300 transform"
+                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave="ease-in duration-200 transform"
+                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
                     
-                    <!-- Recording OSD Demo (On-Screen Display) -->
-                    <div class="absolute top-4 left-4 z-20 flex items-center bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/20 shadow-lg">
-                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse mr-2 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
-                        <span class="text-white font-mono text-xs font-bold tracking-widest" x-text="selectedLog?.camera_name?.toUpperCase()"></span>
-                    </div>
-                    <div class="absolute bottom-4 right-4 z-20 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/20 text-white font-mono text-xs font-bold tracking-wider shadow-lg" x-text="new Date().toLocaleDateString('id-ID') + ' ' + selectedLog?.timestamp + ':00'"></div>
-                </div>
+                    <button @click="closePhotoModal()" class="absolute top-4 right-4 bg-gray-100 hover:bg-red-50 hover:text-red-500 rounded-full p-2 transition-colors focus:outline-none z-50">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
 
+                    <div class="w-full text-left mb-4">
+                        <h3 class="text-2xl font-black text-gray-800 mb-1 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            Inspeksi Visual CCTV
+                        </h3>
+                        <div class="flex flex-wrap items-center space-x-2 text-sm text-gray-600 mt-2" x-show="selectedLog">
+                            <span class="font-bold border border-gray-200 bg-gray-50 px-2 py-0.5 rounded shadow-sm text-blue-900" x-text="selectedLog?.timestamp"></span> 
+                            <span>•</span>
+                            <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-black uppercase tracking-widest shadow-sm" x-text="selectedLog?.event_type?.replace('_', ' ')"></span>
+                            <span>•</span>
+                            <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> <b class="text-gray-800" x-text="selectedLog?.camera_name"></b></span>
+                        </div>
+                    </div>
+
+                    <div class="w-full bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center min-h-[350px] max-h-[65vh] relative shadow-inner border border-gray-800">
+                        <img :src="selectedLog?.snapshot_path" alt="Snapshot NVR" class="max-w-full max-h-[65vh] object-contain relative z-10 w-full" x-show="selectedLog?.snapshot_path" @error="$event.target.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' bg=\'gray\'><rect width=\'100%\' height=\'100%\' fill=\'%23dddddd\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'20px\' text-anchor=\'middle\' fill=\'%23555\'>Gambar Tidak Ditemukan</text></svg>'">
+                        
+                        <!-- Recording OSD Demo (On-Screen Display) -->
+                        <div class="absolute top-4 left-4 z-20 flex items-center bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/20 shadow-lg">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse mr-2 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                            <span class="text-white font-mono text-xs font-bold tracking-widest" x-text="selectedLog?.camera_name?.toUpperCase()"></span>
+                        </div>
+                        <div class="absolute bottom-4 right-4 z-20 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/20 text-white font-mono text-xs font-bold tracking-wider shadow-lg" x-text="new Date().toLocaleDateString('id-ID') + ' ' + selectedLog?.timestamp + ':00'"></div>
+                    </div>
+
+                </div>
             </div>
-        </div>
+        </template>
 
     </div>
 
