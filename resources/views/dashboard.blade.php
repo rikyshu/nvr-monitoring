@@ -188,20 +188,20 @@
                 async fetchData() {
                     try {
                         const [summaryRes, chartRes, logsRes, camRes] = await Promise.all([
-                            fetch('/api/nvr/summary'),
-                            fetch('/api/nvr/chart-data'),
-                            fetch('/api/nvr/recent-logs'),
-                            fetch('/api/nvr/cameras')
+                            window.axios.get('/api/nvr/summary'),
+                            window.axios.get('/api/nvr/chart-data'),
+                            window.axios.get('/api/nvr/recent-logs'),
+                            window.axios.get('/api/nvr/cameras')
                         ]);
 
-                        this.summary = await summaryRes.json();
-                        this.recentLogs = await logsRes.json();
-                        this.cameras = await camRes.json();
+                        this.summary = summaryRes.data;
+                        this.recentLogs = logsRes.data;
+                        this.cameras = camRes.data;
                         
                         document.getElementById('sync-time').innerText = `(Terakhir Sinkron: ${this.summary.terakhir_sinkron})`;
 
                         // Init Chart
-                        const chartData = await chartRes.json();
+                        const chartData = chartRes.data;
                         
                         // Wait for window.Chart to be available if vite is slow
                         let checks = 0;
