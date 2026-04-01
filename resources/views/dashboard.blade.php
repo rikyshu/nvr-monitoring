@@ -110,9 +110,9 @@
                                             </td>
                                             <td class="px-5 py-4 text-center">
                                                 <template x-if="log.snapshot_path">
-                                                    <a href="#" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                                                    <a href="#" @click.prevent="openPhotoModal(log)" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                                        Lihat
+                                                        Lihat Foto
                                                     </a>
                                                 </template>
                                                 <template x-if="!log.snapshot_path">
@@ -170,6 +170,55 @@
 
             </div>
         </div>
+        <!-- Modal Detail Foto Alpine.js -->
+        <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/80 backdrop-blur-sm transition-opacity"
+            x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0">
+            
+            <div @click.outside="closePhotoModal()" class="bg-white rounded-2xl shadow-2xl p-6 w-11/12 max-w-4xl relative overflow-hidden flex flex-col items-center border border-gray-100"
+                 x-transition:enter="ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-200 transform"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                
+                <button @click="closePhotoModal()" class="absolute top-4 right-4 bg-gray-100 hover:bg-red-50 hover:text-red-500 rounded-full p-2 transition-colors focus:outline-none z-50">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
+                <div class="w-full text-left mb-4">
+                    <h3 class="text-2xl font-black text-gray-800 mb-1 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Inspeksi Visual CCTV
+                    </h3>
+                    <div class="flex flex-wrap items-center space-x-2 text-sm text-gray-600 mt-2" x-show="selectedLog">
+                        <span class="font-bold border border-gray-200 bg-gray-50 px-2 py-0.5 rounded shadow-sm text-blue-900" x-text="selectedLog?.timestamp"></span> 
+                        <span>•</span>
+                        <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-black uppercase tracking-widest shadow-sm" x-text="selectedLog?.event_type?.replace('_', ' ')"></span>
+                        <span>•</span>
+                        <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> <b class="text-gray-800" x-text="selectedLog?.camera_name"></b></span>
+                    </div>
+                </div>
+
+                <div class="w-full bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center min-h-[350px] max-h-[65vh] relative shadow-inner border border-gray-800">
+                    <img :src="selectedLog?.snapshot_path" alt="Snapshot NVR" class="max-w-full max-h-[65vh] object-contain relative z-10 w-full" x-show="selectedLog?.snapshot_path">
+                    
+                    <!-- Recording OSD Demo (On-Screen Display) -->
+                    <div class="absolute top-4 left-4 z-20 flex items-center bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/20 shadow-lg">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse mr-2 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                        <span class="text-white font-mono text-xs font-bold tracking-widest" x-text="selectedLog?.camera_name?.toUpperCase()"></span>
+                    </div>
+                    <div class="absolute bottom-4 right-4 z-20 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/20 text-white font-mono text-xs font-bold tracking-wider shadow-lg" x-text="new Date().toLocaleDateString('id-ID') + ' ' + selectedLog?.timestamp + ':00'"></div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
 
     <!-- Script Block for Alpine.js & Chart.js -->
@@ -184,6 +233,20 @@
                 },
                 recentLogs: [],
                 cameras: [],
+                selectedLog: null,
+                isModalOpen: false,
+
+                openPhotoModal(log) {
+                    this.selectedLog = log;
+                    this.isModalOpen = true;
+                    if(document.body) document.body.classList.add('overflow-hidden');
+                },
+
+                closePhotoModal() {
+                    this.isModalOpen = false;
+                    setTimeout(() => { this.selectedLog = null; }, 300);
+                    if(document.body) document.body.classList.remove('overflow-hidden');
+                },
                 
                 async fetchData() {
                     try {
