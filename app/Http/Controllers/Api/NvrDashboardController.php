@@ -51,26 +51,60 @@ class NvrDashboardController extends Controller
     }
 
     /**
-     * Get 24-hour time series data for the main chart.
+     * Get time series data for the main chart based on filter.
      */
-    public function getChartData()
+    public function getChartData(Request $request)
     {
-        $today = Carbon::today();
+        $filter = $request->query('filter', 'today');
         
-        // Retrieve count per hour for today
-        $hourlyData = NvrEvent::whereDate('detected_at', $today)
-            ->select(DB::raw('EXTRACT(HOUR FROM detected_at) as hour'), DB::raw('count(*) as total'))
-            ->groupBy(DB::raw('EXTRACT(HOUR FROM detected_at)'))
-            ->get()
-            ->keyBy('hour');
-
         $chartSeries = [];
         $labels = [];
 
-        for ($i = 0; $i < 24; $i++) {
-            $formattedHourStr = sprintf("%02d:00", $i);
-            $labels[] = $formattedHourStr;
-            $chartSeries[] = isset($hourlyData[$i]) ? $hourlyData[$i]->total : 0;
+        if ($filter === 'this_month') {
+            $startOfMonth = Carbon::now()->startOfMonth();
+            $endOfMonth = Carbon::now()->endOfMonth();
+            $daysInMonth = $endOfMonth->day;
+
+            $dailyData = NvrEvent::whereBetween('detected_at', [$startOfMonth, $endOfMonth])
+                ->select(DB::raw('DATE(detected_at) as date'), DB::raw('count(*) as total'))
+                ->groupBy(DB::raw('DATE(detected_at)'))
+                ->get()
+                ->keyBy('date');
+
+            for ($i = 1; $i <= $daysInMonth; $i++) {
+                $dateStr = $startOfMonth->copy()->addDays($i - 1)->format('Y-m-d');
+                $labels[] = $i . ' ' . $startOfMonth->format('M');
+                $chartSeries[] = isset($dailyData[$dateStr]) ? $dailyData[$dateStr]->total : 0;
+            }
+        } elseif ($filter === '7_days') {
+            $startDate = Carbon::today()->subDays(6);
+            
+            $dailyData = NvrEvent::whereDate('detected_at', '>=', $startDate)
+                ->select(DB::raw('DATE(detected_at) as date'), DB::raw('count(*) as total'))
+                ->groupBy(DB::raw('DATE(detected_at)'))
+                ->get()
+                ->keyBy('date');
+
+            for ($i = 0; $i < 7; $i++) {
+                $date = $startDate->copy()->addDays($i);
+                $dateStr = $date->format('Y-m-d');
+                $labels[] = $date->format('d M');
+                $chartSeries[] = isset($dailyData[$dateStr]) ? $dailyData[$dateStr]->total : 0;
+            }
+        } else {
+            // Default: 'today'
+            $today = Carbon::today();
+            $hourlyData = NvrEvent::whereDate('detected_at', $today)
+                ->select(DB::raw('EXTRACT(HOUR FROM detected_at) as hour'), DB::raw('count(*) as total'))
+                ->groupBy(DB::raw('EXTRACT(HOUR FROM detected_at)'))
+                ->get()
+                ->keyBy('hour');
+
+            for ($i = 0; $i < 24; $i++) {
+                $formattedHourStr = sprintf("%02d:00", $i);
+                $labels[] = $formattedHourStr;
+                $chartSeries[] = isset($hourlyData[$i]) ? $hourlyData[$i]->total : 0;
+            }
         }
 
         return response()->json([
@@ -80,17 +114,16 @@ class NvrDashboardController extends Controller
     }
 
     /**
-     * Get latest event logs.
+     * Get paginated recent event logs.
      */
     public function getRecentLogs()
     {
         $logs = NvrEvent::orderBy('detected_at', 'desc')
-            ->take(10)
-            ->get()
-            ->map(function ($event) {
+            ->paginate(10)
+            ->through(function ($event) {
                 return [
                     'id' => $event->id,
-                    'timestamp' => $event->detected_at->format('H:i'),
+                    'timestamp' => $event->detected_at->format('Y-m-d H:i:s'),
                     'camera_name' => $event->camera_name,
                     'event_type' => $event->event_type,
                     'snapshot_path' => $event->snapshot_path,

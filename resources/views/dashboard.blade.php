@@ -74,8 +74,18 @@
                     <!-- Area Chart -->
                     <div class="bg-white rounded-2xl shadow-sm p-7 border border-gray-100 flex-1 relative overflow-hidden">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-                            <h3 class="text-xl font-bold text-gray-800">Tren Aktivitas Pergerakan (Hari Ini)</h3>
-                            <div class="bg-gray-100 px-3 py-1 rounded-md text-xs font-semibold text-gray-500 mt-2 sm:mt-0">Sumbu Y: Jumlah Pergerakan</div>
+                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                Tren Aktivitas Pergerakan
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-0.5 rounded ml-2" x-text="chartFilterText"></span>
+                            </h3>
+                            <div class="flex items-center space-x-3 mt-3 sm:mt-0">
+                                <select x-model="chartFilter" @change="fetchChart()" class="text-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-gray-600 bg-gray-50 font-medium py-1.5 pl-3 pr-8">
+                                    <option value="today">Hari Ini</option>
+                                    <option value="7_days">7 Hari Terakhir</option>
+                                    <option value="this_month">Bulan Ini</option>
+                                </select>
+                                <div class="bg-gray-100 px-3 py-1.5 rounded-md text-xs font-semibold text-gray-500 hidden md:block border border-gray-200 shadow-inner">Sumbu Y: Frekuensi</div>
+                            </div>
                         </div>
                         <div class="relative h-80 w-full mt-2">
                             <canvas id="nvrChart"></canvas>
@@ -127,6 +137,21 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Pagination Nav -->
+                        <div class="mt-5 flex flex-col sm:flex-row justify-between items-center text-sm" x-show="logsPagination">
+                            <div class="text-gray-500 mb-4 sm:mb-0">
+                                Menampilkan <span class="font-bold text-gray-700" x-text="logsPagination.from || 0"></span> - <span class="font-bold text-gray-700" x-text="logsPagination.to || 0"></span> dari <span class="font-bold text-gray-700" x-text="logsPagination.total"></span> riwayat
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button @click="fetchLogs(logsPagination.prev_page_url)" :disabled="!logsPagination.prev_page_url" :class="!logsPagination.prev_page_url ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300 text-blue-600'" class="px-3 py-1.5 border rounded-md font-medium transition shadow-sm">
+                                    &laquo; Sebelumnya
+                                </button>
+                                <button @click="fetchLogs(logsPagination.next_page_url)" :disabled="!logsPagination.next_page_url" :class="!logsPagination.next_page_url ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300 text-blue-600'" class="px-3 py-1.5 border rounded-md font-medium transition shadow-sm">
+                                    Selanjutnya &raquo;
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -236,9 +261,16 @@
                     penyimpanan_tersedia: '-'
                 },
                 recentLogs: [],
+                logsPagination: null,
                 cameras: [],
                 selectedLog: null,
                 isModalOpen: false,
+                chartFilter: 'today',
+
+                get chartFilterText() {
+                    const map = { 'today': 'Hari Ini', '7_days': '7 Hari Terakhir', 'this_month': 'Bulan Ini' };
+                    return map[this.chartFilter] || 'Hari Ini';
+                },
 
                 openPhotoModal(log) {
                     this.selectedLog = log;
@@ -254,34 +286,49 @@
                 
                 async fetchData() {
                     try {
-                        const [summaryRes, chartRes, logsRes, camRes] = await Promise.all([
+                        const [summaryRes, camRes] = await Promise.all([
                             window.axios.get('/api/nvr/summary'),
-                            window.axios.get('/api/nvr/chart-data'),
-                            window.axios.get('/api/nvr/recent-logs'),
                             window.axios.get('/api/nvr/cameras')
                         ]);
 
                         this.summary = summaryRes.data;
-                        this.recentLogs = logsRes.data;
                         this.cameras = camRes.data;
-                        
                         document.getElementById('sync-time').innerText = `(Terakhir Sinkron: ${this.summary.terakhir_sinkron})`;
 
-                        // Init Chart
-                        const chartData = chartRes.data;
+                        this.fetchChart();
+                        this.fetchLogs();
+                    } catch (error) {
+                        console.error("Gagal mengambil data dari API NVR:", error);
+                    }
+                },
+
+                async fetchChart() {
+                    try {
+                        const res = await window.axios.get(`/api/nvr/chart-data?filter=${this.chartFilter}`);
+                        const chartData = res.data;
                         
-                        // Wait for window.Chart to be available if vite is slow
                         let checks = 0;
                         const checkChart = setInterval(() => {
                             if(window.Chart) {
                                 clearInterval(checkChart);
                                 this.initChart(chartData.labels, chartData.series);
                             }
-                            if(checks++ > 20) clearInterval(checkChart); // Timeout
+                            if(checks++ > 20) clearInterval(checkChart);
                         }, 100);
+                    } catch(e) {
+                        console.error("Gagal load chart", e);
+                    }
+                },
 
-                    } catch (error) {
-                        console.error("Gagal mengambil data dari API NVR:", error);
+                async fetchLogs(url = null) {
+                    try {
+                        const endpoint = url || '/api/nvr/recent-logs';
+                        const res = await window.axios.get(endpoint);
+                        
+                        this.recentLogs = res.data.data;
+                        this.logsPagination = res.data;
+                    } catch(e) {
+                        console.error("Gagal load log", e);
                     }
                 },
                 
