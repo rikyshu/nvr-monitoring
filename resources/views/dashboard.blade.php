@@ -1,19 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 relative z-20">
-            <h2 class="font-bold text-2xl text-blue-900 dark:text-gray-200 leading-tight">
+            <h2 class="font-bold text-2xl text-white leading-tight drop-shadow-sm">
                 Dashboard Analitik Pergerakan NVR
             </h2>
-            <div class="bg-blue-50 text-blue-800 px-5 py-2 rounded-full font-medium text-sm border border-blue-200 flex items-center shadow-sm">
-                Status NVR: <span class="ml-2 w-3 h-3 bg-emerald-500 rounded-full inline-block animate-pulse"></span>
-                <span class="ml-1 text-emerald-600 font-bold">Online</span> 
-                <span class="ml-1 text-gray-500 font-normal" id="sync-time">(Terakhir Sinkron: --:--)</span>
+            <div class="bg-white/15 backdrop-blur-md text-white px-5 py-2 rounded-full font-medium text-sm border border-white/20 flex items-center shadow-lg">
+                Status NVR: <span class="ml-2 w-3 h-3 bg-emerald-400 rounded-full inline-block animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]"></span>
+                <span class="ml-1 text-emerald-300 font-bold">Online</span> 
+                <span class="ml-1 text-blue-200/70 font-normal" id="sync-time">(Terakhir Sinkron: --:--)</span>
             </div>
         </div>
     </x-slot>
 
-    <!-- Top background blue section -->
-    <div class="absolute top-0 w-full h-72 bg-gradient-to-r from-blue-900 to-blue-700 z-0 hidden lg:block"></div>
+    <!-- Top background brand section -->
+    <div class="absolute top-0 w-full h-72 bg-gradient-to-b from-brand-500/10 to-transparent z-0 hidden lg:block"></div>
 
     <div class="py-8 relative min-h-screen" x-data="dashboardData()" x-init="fetchData()">
         
@@ -21,47 +21,47 @@
             <!-- 4 Top Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
                 <!-- Card 1 -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 flex items-center relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-blue-50 rounded-full opacity-50 z-0"></div>
-                    <div class="rounded-xl bg-blue-50 p-4 mr-4 text-blue-600 relative z-10">
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 flex items-center relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 w-20 h-20 bg-brand-50 rounded-full opacity-50 z-0 group-hover:scale-125 transition-transform duration-500"></div>
+                    <div class="rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 p-4 mr-4 text-white relative z-10 shadow-lg shadow-brand-500/20">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
                     </div>
                     <div class="relative z-10">
                         <p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Total Gerakan Hari Ini</p>
-                        <h3 class="text-3xl font-extrabold text-gray-800" x-text="summary.total_gerakan_hari_ini">0</h3>
+                        <h3 class="text-3xl font-extrabold text-brand-800" x-text="summary.total_gerakan_hari_ini">0</h3>
                     </div>
                 </div>
                 <!-- Card 2 -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 flex items-center relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-indigo-50 rounded-full opacity-50 z-0"></div>
-                    <div class="rounded-xl bg-indigo-50 p-4 mr-4 text-indigo-600 relative z-10">
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 flex items-center relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 w-20 h-20 bg-brand-50 rounded-full opacity-50 z-0 group-hover:scale-125 transition-transform duration-500"></div>
+                    <div class="rounded-xl bg-gradient-to-br from-brand-400 to-brand-500 p-4 mr-4 text-white relative z-10 shadow-lg shadow-brand-400/20">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                     <div class="relative z-10">
                         <p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Jam Puncak Aktivitas</p>
-                        <h3 class="text-xl font-extrabold text-gray-800" x-text="summary.jam_puncak">--:--</h3>
+                        <h3 class="text-xl font-extrabold text-brand-800" x-text="summary.jam_puncak">--:--</h3>
                     </div>
                 </div>
                 <!-- Card 3 -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 flex items-center relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-teal-50 rounded-full opacity-50 z-0"></div>
-                    <div class="rounded-xl bg-teal-50 p-4 mr-4 text-teal-600 relative z-10">
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 flex items-center relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 w-20 h-20 bg-teal-50 rounded-full opacity-50 z-0 group-hover:scale-125 transition-transform duration-500"></div>
+                    <div class="rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 p-4 mr-4 text-white relative z-10 shadow-lg shadow-teal-500/20">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                     </div>
                     <div class="relative z-10 w-full">
                         <p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Kamera Teraktif</p>
-                        <h3 class="text-lg font-extrabold text-gray-800 truncate w-full max-w-[150px]" x-text="summary.kamera_teraktif">Memuat...</h3>
+                        <h3 class="text-lg font-extrabold text-brand-800 truncate w-full max-w-[150px]" x-text="summary.kamera_teraktif">Memuat...</h3>
                     </div>
                 </div>
                 <!-- Card 4 -->
-                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 flex items-center relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-sky-50 rounded-full opacity-50 z-0"></div>
-                    <div class="rounded-xl bg-sky-50 p-4 mr-4 text-sky-600 relative z-10">
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 flex items-center relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 w-20 h-20 bg-amber-50 rounded-full opacity-50 z-0 group-hover:scale-125 transition-transform duration-500"></div>
+                    <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 p-4 mr-4 text-white relative z-10 shadow-lg shadow-amber-500/20">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
                     </div>
                     <div class="relative z-10">
                         <p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Storage NVR</p>
-                        <h3 class="text-xl font-extrabold text-gray-800" x-text="summary.penyimpanan_tersedia">0%</h3>
+                        <h3 class="text-xl font-extrabold text-brand-800" x-text="summary.penyimpanan_tersedia">0%</h3>
                     </div>
                 </div>
             </div>
@@ -74,12 +74,12 @@
                     <!-- Area Chart -->
                     <div class="bg-white rounded-2xl shadow-sm p-7 border border-gray-100 flex-1 relative overflow-hidden">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <h3 class="text-xl font-bold text-brand-800 flex items-center">
                                 Tren Aktivitas Pergerakan
-                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-0.5 rounded ml-2" x-text="chartFilterText"></span>
+                                <span class="bg-brand-100 text-brand-700 text-xs font-semibold px-2 py-0.5 rounded ml-2" x-text="chartFilterText"></span>
                             </h3>
                             <div class="flex items-center space-x-3 mt-3 sm:mt-0">
-                                <select x-model="chartFilter" @change="fetchChart()" class="text-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-gray-600 bg-gray-50 font-medium py-1.5 pl-3 pr-8">
+                                <select x-model="chartFilter" @change="fetchChart()" class="text-sm border-brand-200 focus:border-brand-500 focus:ring-brand-500 rounded-md shadow-sm text-brand-700 bg-brand-50 font-medium py-1.5 pl-3 pr-8">
                                     <option value="today">Hari Ini</option>
                                     <option value="7_days">7 Hari Terakhir</option>
                                     <option value="this_month">Bulan Ini</option>
@@ -94,10 +94,10 @@
 
                     <!-- Tabel Log Aktivitas -->
                     <div class="bg-white rounded-2xl shadow-sm p-7 border border-gray-100 overflow-hidden">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6">Log Aktivitas Langsung (Real-time)</h3>
+                        <h3 class="text-xl font-bold text-brand-800 mb-6">Log Aktivitas Langsung (Real-time)</h3>
                         <div class="overflow-x-auto rounded-xl border border-gray-100">
                             <table class="w-full text-left text-sm text-gray-600">
-                                <thead class="text-xs text-gray-500 bg-gray-50 uppercase font-bold tracking-wider">
+                                <thead class="text-xs text-brand-600 bg-brand-50 uppercase font-bold tracking-wider">
                                     <tr>
                                         <th class="px-5 py-4 w-24">Waktu</th>
                                         <th class="px-5 py-4">Nama Kamera</th>
@@ -107,20 +107,20 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                                     <template x-for="log in recentLogs" :key="log.id">
-                                        <tr class="hover:bg-blue-50/30 transition-colors">
+                                        <tr class="hover:bg-brand-50/30 transition-colors">
                                             <td class="px-5 py-4">
-                                                <span class="font-bold text-gray-900 bg-gray-100 px-2 py-1 rounded" x-text="log.timestamp"></span>
+                                                <span class="font-bold text-brand-900 bg-brand-50 px-2 py-1 rounded" x-text="log.timestamp"></span>
                                             </td>
                                             <td class="px-5 py-4 font-medium text-gray-700" x-text="log.camera_name"></td>
                                             <td class="px-5 py-4">
                                                 <span 
-                                                    class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-semibold whitespace-nowrap" 
+                                                    class="px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-semibold whitespace-nowrap" 
                                                     x-text="log.event_type.replace('_', ' ')">
                                                 </span>
                                             </td>
                                             <td class="px-5 py-4 text-center">
                                                 <template x-if="log.snapshot_path">
-                                                    <a href="#" @click.prevent="openPhotoModal(log)" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                                                    <a href="#" @click.prevent="openPhotoModal(log)" class="inline-flex items-center text-brand-600 hover:text-brand-800 font-medium transition-colors">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                                         Lihat Foto
                                                     </a>
@@ -142,13 +142,13 @@
                         <!-- Pagination Nav -->
                         <div class="mt-5 flex flex-col sm:flex-row justify-between items-center text-sm" x-show="logsPagination">
                             <div class="text-gray-500 mb-4 sm:mb-0">
-                                Menampilkan <span class="font-bold text-gray-700" x-text="logsPagination.from || 0"></span> - <span class="font-bold text-gray-700" x-text="logsPagination.to || 0"></span> dari <span class="font-bold text-gray-700" x-text="logsPagination.total"></span> riwayat
+                                Menampilkan <span class="font-bold text-brand-700" x-text="logsPagination.from || 0"></span> - <span class="font-bold text-brand-700" x-text="logsPagination.to || 0"></span> dari <span class="font-bold text-brand-700" x-text="logsPagination.total"></span> riwayat
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button @click="fetchLogs(logsPagination.prev_page_url)" :disabled="!logsPagination.prev_page_url" :class="!logsPagination.prev_page_url ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300 text-blue-600'" class="px-3 py-1.5 border rounded-md font-medium transition shadow-sm">
+                                <button @click="fetchLogs(logsPagination.prev_page_url)" :disabled="!logsPagination.prev_page_url" :class="!logsPagination.prev_page_url ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400' : 'bg-brand-500 text-white hover:bg-brand-600 shadow-md shadow-brand-500/20'" class="px-4 py-1.5 rounded-lg font-semibold transition text-sm">
                                     &laquo; Sebelumnya
                                 </button>
-                                <button @click="fetchLogs(logsPagination.next_page_url)" :disabled="!logsPagination.next_page_url" :class="!logsPagination.next_page_url ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300 text-blue-600'" class="px-3 py-1.5 border rounded-md font-medium transition shadow-sm">
+                                <button @click="fetchLogs(logsPagination.next_page_url)" :disabled="!logsPagination.next_page_url" :class="!logsPagination.next_page_url ? 'opacity-50 cursor-not-allowed bg-gray-100 text-gray-400' : 'bg-brand-500 text-white hover:bg-brand-600 shadow-md shadow-brand-500/20'" class="px-4 py-1.5 rounded-lg font-semibold transition text-sm">
                                     Selanjutnya &raquo;
                                 </button>
                             </div>
@@ -159,24 +159,24 @@
                 <!-- Kanan: Daftar Kamera & Status -->
                 <div class="xl:col-span-1">
                     <div class="bg-white rounded-2xl shadow-sm p-7 border border-gray-100 h-full">
-                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        <h3 class="text-xl font-bold text-brand-800 mb-6 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                             Daftar Kamera NVR
                         </h3>
                         <div class="space-y-4">
                             <template x-for="cam in cameras" :key="cam.camera_id">
                                 <div class="p-4 border border-gray-100 rounded-xl hover:shadow-md transition-shadow bg-gray-50/50 flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <div class="w-14 h-12 bg-gray-200 rounded-lg overflow-hidden relative mr-4 shadow-sm border border-gray-200">
-                                            <!-- Dummy Camera Thumb Placeholder -->
-                                            <div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">
+                                        <div class="w-14 h-12 bg-brand-100 rounded-lg overflow-hidden relative mr-4 shadow-sm border border-brand-200/50">
+                                            <!-- Camera Thumb Placeholder -->
+                                            <div class="w-full h-full flex items-center justify-center text-brand-400">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                                             </div>
                                             <div class="absolute top-0 right-0 bg-green-500 text-white text-[9px] px-1 m-0.5 rounded-sm font-bold shadow" x-show="cam.status === 'LIVE'">REC</div>
                                         </div>
                                         <div>
-                                            <h4 class="text-sm font-bold text-gray-800 leading-tight mb-1" x-text="cam.camera_name"></h4>
-                                            <p class="text-[11px] font-medium text-gray-500 bg-white px-1.5 py-0.5 rounded border border-gray-200 inline-block" x-text="cam.camera_id"></p>
+                                            <h4 class="text-sm font-bold text-brand-800 leading-tight mb-1" x-text="cam.camera_name"></h4>
+                                            <p class="text-[11px] font-medium text-brand-500 bg-brand-50 px-1.5 py-0.5 rounded border border-brand-100 inline-block" x-text="cam.camera_id"></p>
                                         </div>
                                     </div>
                                     <span 
@@ -199,7 +199,7 @@
         </div>
         <!-- Modal Detail Foto Alpine.js (Teleport ke Body untuk Z-Index Absolute Tertinggi) -->
         <template x-teleport="body">
-            <div x-show="isModalOpen" style="display: none; z-index: 99999;" class="fixed inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm transition-opacity"
+            <div x-show="isModalOpen" style="display: none; z-index: 99999;" class="fixed inset-0 flex items-center justify-center bg-brand-950/80 backdrop-blur-sm transition-opacity"
                 x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100"
@@ -220,20 +220,20 @@
                     </button>
 
                     <div class="w-full text-left mb-4">
-                        <h3 class="text-2xl font-black text-gray-800 mb-1 flex items-center">
-                            <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <h3 class="text-2xl font-black text-brand-800 mb-1 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             Inspeksi Visual CCTV
                         </h3>
                         <div class="flex flex-wrap items-center space-x-2 text-sm text-gray-600 mt-2" x-show="selectedLog">
-                            <span class="font-bold border border-gray-200 bg-gray-50 px-2 py-0.5 rounded shadow-sm text-blue-900" x-text="selectedLog?.timestamp"></span> 
+                            <span class="font-bold border border-brand-200 bg-brand-50 px-2 py-0.5 rounded shadow-sm text-brand-900" x-text="selectedLog?.timestamp"></span> 
                             <span>•</span>
-                            <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-black uppercase tracking-widest shadow-sm" x-text="selectedLog?.event_type?.replace('_', ' ')"></span>
+                            <span class="px-2 py-0.5 bg-brand-50 text-brand-700 rounded text-xs font-black uppercase tracking-widest shadow-sm" x-text="selectedLog?.event_type?.replace('_', ' ')"></span>
                             <span>•</span>
-                            <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> <b class="text-gray-800" x-text="selectedLog?.camera_name"></b></span>
+                            <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> <b class="text-brand-800" x-text="selectedLog?.camera_name"></b></span>
                         </div>
                     </div>
 
-                    <div class="w-full bg-gray-900 rounded-xl overflow-hidden flex items-center justify-center min-h-[350px] max-h-[65vh] relative shadow-inner border border-gray-800">
+                    <div class="w-full bg-brand-950 rounded-xl overflow-hidden flex items-center justify-center min-h-[350px] max-h-[65vh] relative shadow-inner border border-brand-800">
                         <img :src="selectedLog?.snapshot_path" alt="Snapshot NVR" class="max-w-full max-h-[65vh] object-contain relative z-10 w-full" x-show="selectedLog?.snapshot_path" x-on:error="$event.target.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' bg=\'gray\'><rect width=\'100%\' height=\'100%\' fill=\'%23dddddd\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'20px\' text-anchor=\'middle\' fill=\'%23555\'>Gambar Tidak Ditemukan</text></svg>'">
                         
                         <!-- Recording OSD Demo (On-Screen Display) -->
@@ -335,11 +335,11 @@
                 initChart(labels, series) {
                     const ctx = document.getElementById('nvrChart').getContext('2d');
                     
-                    // Membuat efek gradient fill keren ala mockup
+                    // Brand-themed gradient
                     let gradient = ctx.createLinearGradient(0, 0, 0, 350);
-                    gradient.addColorStop(0, 'rgba(99, 102, 241, 0.6)');   // Indigo-ish
-                    gradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.3)'); // Blue-ish
-                    gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');   // Fade out
+                    gradient.addColorStop(0, 'rgba(51, 51, 133, 0.5)');   // brand-500
+                    gradient.addColorStop(0.5, 'rgba(85, 85, 176, 0.25)'); // brand-400
+                    gradient.addColorStop(1, 'rgba(51, 51, 133, 0.0)');   // Fade out
                     
                     if (window.nvrChartInst) { window.nvrChartInst.destroy(); }
                     
@@ -350,17 +350,17 @@
                             datasets: [{
                                 label: 'Gerakan (Aktivitas)',
                                 data: series,
-                                borderColor: '#4f46e5', // Indigo 600
+                                borderColor: '#333385',
                                 backgroundColor: gradient,
                                 fill: true,
-                                tension: 0.45, // Membuat garis sangat mulus (curviness)
+                                tension: 0.45,
                                 borderWidth: 3,
                                 pointBackgroundColor: '#ffffff',
-                                pointBorderColor: '#4f46e5',
+                                pointBorderColor: '#333385',
                                 pointBorderWidth: 2,
                                 pointRadius: 4,
                                 pointHoverRadius: 6,
-                                pointHoverBackgroundColor: '#4f46e5',
+                                pointHoverBackgroundColor: '#333385',
                                 pointHoverBorderColor: '#ffffff'
                             }]
                         },
@@ -374,7 +374,7 @@
                             plugins: {
                                 legend: { display: false },
                                 tooltip: {
-                                    backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                                    backgroundColor: 'rgba(30, 30, 79, 0.95)',
                                     padding: 12,
                                     titleFont: { size: 13 },
                                     bodyFont: { size: 14, weight: 'bold' },
@@ -390,7 +390,7 @@
                                 },
                                 x: {
                                     grid: { display: false, drawBorder: false },
-                                    ticks: { color: '#9ca3af', font: { size: 11 }, maxTicksLimit: 12, padding: 10 } // Tampilkan setiap ~2 jam
+                                    ticks: { color: '#9ca3af', font: { size: 11 }, maxTicksLimit: 12, padding: 10 }
                                 }
                             }
                         }
